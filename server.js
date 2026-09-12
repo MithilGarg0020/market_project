@@ -51,7 +51,8 @@ app.get('/', (req, res) => {
   res.send('Backend is working!');
 });
 
-app.get('/api/health', (req, res) => {
+// Health endpoints
+app.get(['/api/health', '/health'], (req, res) => {
   res.json({
     status: 'ok',
     db: mongoose.connection.readyState === 1
@@ -60,11 +61,12 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-app.use('/api/agencies', agencyRoutes);
-app.use('/api/items', itemRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/members', memberRoutes);
+// Mount routes on both /api/* and root /* to prevent 404 from frontend base URL mismatches
+app.use(['/api/agencies', '/agencies'], agencyRoutes);
+app.use(['/api/items', '/items'], itemRoutes);
+app.use(['/api/admin', '/admin'], adminRoutes);
+app.use(['/api/orders', '/orders'], orderRoutes);
+app.use(['/api/members', '/members'], memberRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
