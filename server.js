@@ -27,6 +27,14 @@ if (!MONGODB_URI) {
 
 app.disable('x-powered-by');
 
+// Clean duplicate slashes from URLs (e.g. //agencies -> /agencies)
+app.use((req, res, next) => {
+  if (req.url.includes('//')) {
+    req.url = req.url.replace(/\/+/g, '/');
+  }
+  next();
+});
+
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
