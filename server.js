@@ -36,7 +36,8 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-  origin: CLIENT_ORIGIN
+  origin: true,
+  credentials: true
 }));
 
 app.use(express.json({ limit: '1mb' }));
@@ -44,6 +45,11 @@ app.use(express.urlencoded({
   extended: true,
   limit: '1mb'
 }));
+
+// Root endpoint for testing / health check
+app.get('/', (req, res) => {
+  res.send('Backend is working!');
+});
 
 app.get('/api/health', (req, res) => {
   res.json({
